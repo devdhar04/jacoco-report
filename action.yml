@@ -1,0 +1,17 @@
+name: jacoco-report
+
+description: test cases and code coevrage
+author: Dev
+
+branding:
+  icon: file-text
+  color: blue
+
+runs:
+  using: 'docker'
+  image: 'docker://devdhar04/jacoco-report:main'
+
+inputs:
+  repotoken:
+    description: A token that grands access to read/write actions. Usually secrets.GITHUB_TOKEN.
+    required: true
