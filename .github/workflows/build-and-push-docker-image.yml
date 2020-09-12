@@ -32,5 +32,5 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: image/Dockerfile
-          repository: le0nidas/ktlint-pr-comments
+          repository: devdhar04/jacoco-report
           tag_with_ref: true
