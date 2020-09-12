@@ -1,17 +1,15 @@
-name: jacoco-report
-
-description: test cases and code coevrage
-author: Dev
-
-branding:
-  icon: file-text
-  color: blue
-
+name: 'Hello World'
+description: 'Greet someone and record the time'
+inputs:
+  who-to-greet:  # id of input
+    description: 'Who to greet'
+    required: true
+    default: 'World'
+outputs:
+  time: # id of output
+    description: 'The time we greeted you'
 runs:
   using: 'docker'
-  image: 'docker://devdhar04/jacoco-report:main'
-
-inputs:
-  repotoken:
-    description: A token that grands access to read/write actions. Usually secrets.GITHUB_TOKEN.
-    required: true
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.who-to-greet }}
