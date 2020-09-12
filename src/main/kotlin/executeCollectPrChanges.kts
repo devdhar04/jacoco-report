@@ -16,4 +16,4 @@ if (result != 0) {
     exitProcess(result)
 }
 
-println("Changes collected")
+println("Changes collected $result")
