@@ -4,8 +4,8 @@
 cp /executeCollectPrChanges $GITHUB_WORKSPACE
 
 echo "Hello $1"
-repotoken=$(date)
-echo "::set-output name=repotoken::$time"
+time=$(date)
+echo "::set-output name=time::$time"
 
 echo 'Collecting PR changes...'
 ./executeCollectPrChanges $GITHUB_EVENT_PATH $INPUT_REPOTOKEN
