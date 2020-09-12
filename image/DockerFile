@@ -1,4 +1,3 @@
-# Container image that runs your code
 FROM openjdk:8-alpine
 
 RUN apk upgrade --update && \
@@ -7,10 +6,12 @@ RUN apk upgrade --update && \
 RUN curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.38.0/ktlint && chmod a+x ktlint
 
 COPY executeCollectPrChanges /executeCollectPrChanges
+RUN chmod +x /executeCollectPrChanges
 
+COPY executeMakePrComments /executeMakePrComments
+RUN chmod +x /executeMakePrComments
 
 COPY image/run-scripts.sh /run-scripts.sh
 RUN chmod +x /run-scripts.sh
 
-# Code file to execute when the docker container starts up (`entrypoint.sh`)
 ENTRYPOINT /bin/bash /run-scripts.sh

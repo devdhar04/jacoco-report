@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
+COLLECTION_REPORT="collection-report.txt"
+KTLINT_REPORT="ktlint-report.json"
+EMPTY_KTLINT_REPORT=$'[\n]'
 
 cp /executeCollectPrChanges $GITHUB_WORKSPACE
-
-echo "Hello $1"
-time=$(date)
-echo "::set-output name=time::$time"
+cp /ktlint $GITHUB_WORKSPACE
+cp /executeMakePrComments $GITHUB_WORKSPACE
 
 echo 'Collecting PR changes...'
 ./executeCollectPrChanges $GITHUB_EVENT_PATH $INPUT_REPOTOKEN
@@ -16,3 +17,32 @@ if [ $collection_result -ne 0 ]; then
   exit $collection_result
 fi
 
+test -s $COLLECTION_REPORT
+collection_is_empty=$?
+if [ $collection_is_empty -ne 0 ]; then
+  echo 'There were no changes in .kt files'
+  exit 0
+fi
+
+echo '------------------------'
+echo ''
+
+
+echo 'Running ktlint...'
+echo "::debug::$COLLECTION_REPORT=$(cat $COLLECTION_REPORT)"
+./ktlint $(cat $COLLECTION_REPORT | awk 'BEGIN { ORS=" " }; {print $1}') --reporter=json,output=$KTLINT_REPORT
+echo "::debug::$KTLINT_REPORT=$(cat $KTLINT_REPORT)"
+
+if [ "$(cat $KTLINT_REPORT)" = "$EMPTY_KTLINT_REPORT" ]; then
+  echo 'There are no errors in these files'
+  exit 0
+fi
+
+echo '-----------------'
+echo ''
+
+
+echo 'Make comments in PR...'
+./executeMakePrComments $GITHUB_EVENT_PATH $INPUT_REPOTOKEN
+echo '----------------------'
+echo ''
